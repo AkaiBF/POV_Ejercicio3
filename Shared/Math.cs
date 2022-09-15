@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace SimpleGame.Math{
 
 public class Vector3{
@@ -20,6 +21,12 @@ public Vector3(double[] vec){
     z=(float)vec[2];
 }
 
+public Vector3(Vector3 vec){
+    x=vec.x;
+    y=vec.y;
+    z=vec.z;
+}
+
 public void  Add(Vector3 v){
     x += v.x;
     y += v.y;
@@ -35,6 +42,12 @@ public static Vector3 operator+(Vector3 v1,Vector3 v2){
    return v;
 }
 
+public static Vector3 operator*(Vector3 v1,Vector3 v2){
+    Vector3 v=new Vector3(v1.x*v2.x,v1.y*v2.y,v1.z*v2.z);
+   return v;
+}
+
+
 public static Vector3 operator*(double f, Vector3 v1){
     Vector3 v = new Vector3(v1.x,v1.y,v1.z);
     float ff=(float)f;
@@ -47,6 +60,36 @@ public static Vector3 operator*(double f, Vector3 v1){
 public static Vector3 operator*(Vector3 v1, double f){
     return f*v1;
 }
+
+/*
+public static bool operator==(Vector3 v1, Vector3 v2){
+    return (v1.x==v2.x && v1.y==v2.y && v1.z==v2.z);
+}
+
+public static bool operator!=(Vector3 v1, Vector3 v2){
+    return !(v1==v2);
+}
+*/
+
+public static bool operator>(Vector3 v1,Vector3 v2){
+    if(v1==v2)
+        return false;
+    return (v1.x>=v2.x && v1.y>=v2.y && v1.z>=v2.z);
+}
+
+public static bool operator<(Vector3 v1,Vector3 v2){
+    if(v1==v2)
+        return false;
+    return (v1.x<=v2.x && v1.y<=v2.y && v1.z<=v2.z);
+}
+
+public static bool operator>=(Vector3 v1, Vector3 v2){
+    return (v1==v2 || v1>v2);
+}
+
+public static bool operator<=(Vector3 v1,Vector3 v2){
+    return (v1==v2 || v1<v2);
+}
 public void Normalize(){
     double norma= System.Math.Sqrt(x*x+y*y+z*z);
     float fnorma=(float)norma;
@@ -58,16 +101,59 @@ public void Normalize(){
 public float Norm(){
     return (float)System.Math.Sqrt(x*x+y*y+z*z);
 }
+
+
 public float[] GetArray(){
     float[] array = new float[3];
     array[0]=x; array[1]=y; array[3]=z; 
     return array;
 }
 
+public static List<Vector3> GenerateList(float[] vals){
+    List<Vector3> list=new List<Vector3>();
+    for(int i=0;i<vals.Length;i+=3){
+        list.Add(new Vector3(vals[i],vals[i+1],vals[i+2]));
+    }
+    return list;
+}
+public static List<Vector3> GenerateList(double[] vals){
+    List<Vector3> list=new List<Vector3>();
+    for(int i=0;i<vals.Length;i+=3){
+        list.Add(new Vector3((float)vals[i],(float)vals[i+1],(float)vals[i+2]));
+    }
+    return list;
+}
+
+public static Vector3 Min(List<Vector3> list){
+    if(list.Count==0)
+        return null;
+    Vector3 minVector= list[0];
+    foreach(var vec in list){
+        if(vec<minVector)
+            minVector=vec;
+    }
+    return minVector;
+}
+
+public static Vector3 Max(List<Vector3> list){
+    if(list.Count==0)
+        return null;
+    Vector3 maxVector= list[0];
+    foreach(var vec in list){
+        if(vec>maxVector)
+            maxVector=vec;
+    }
+    return maxVector;
+}
+
+
+
 public override string ToString(){
     return $"X:{this.x} Y:{this.y} Z:{this.z}";
 }
 }
+
+
 public class Vector4{
     public float x;
     public float y;
@@ -295,7 +381,7 @@ public void Translation(Vector3 vector){
     m23=vector.z;
 }
 
-public Vector3 GetTranslateVector(){
+public Vector3 GetTranslationVector(){
     Vector3 v=new Vector3(m03,m13,m23);
     return v;
 }

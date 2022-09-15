@@ -180,7 +180,6 @@ namespace SimpleGame.Shared
         private void keydownEvent(KeyboardEventArgs e){
             if(!this.GamePlaying)
                 return;
-            Console.WriteLine("KeyDown");
             switch(e.Key){
                 case "w" :
                     double f = System.Math.PI/180;                        
